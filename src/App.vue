@@ -1,28 +1,75 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-navigation-drawer
+      clipped
+      enable-resize-watcher
+      fixed
+      app
+      v-model="drawer"
+      v-if="loggedIn"
+    >
+      <v-list>
+        <v-list-tile
+          value="true"
+          v-for="(item, i) in items"
+          :key="i"
+        >
+          <v-list-tile-action>
+            <v-icon v-html="item.icon"></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar
+      color="primary"
+      dark
+      clipped-left
+      app
+    >
+      <v-toolbar-side-icon
+        @click.stop="drawer = !drawer"
+        v-if="loggedIn"
+      ></v-toolbar-side-icon>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+    </v-toolbar>
+    <v-content>
+      <main-page />
+    </v-content>
+    <v-footer fixed app>
+      <v-flex
+        primary
+        lighten-2
+        py-2
+        text-xs-center
+        white--text
+      >
+        &copy; 2018 - GHShop
+      </v-flex>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MainPage from './components/MainPage'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
+    MainPage
+  },
+  data () {
+    return {
+      drawer: true,
+      items: [{
+        icon: 'bubble_chart',
+        title: 'Inspire'
+      }],
+      title: 'GHShop',
+      loggedIn: false
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
