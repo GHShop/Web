@@ -23,6 +23,7 @@
           value="true"
           v-for="(item, i) in items"
           :key="i"
+          @click="clickOnItem(item.name)"
         >
           <v-list-tile-action>
             <v-icon v-html="item.icon"></v-icon>
@@ -71,8 +72,9 @@ export default {
     return {
       drawer: true,
       items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
+        name: 'log out',
+        icon: 'exit_to_app',
+        title: 'Log out'
       }],
       title: 'GHShop',
       me: null
@@ -82,6 +84,20 @@ export default {
     avatarUrl () {
       if (this.me)
         return gravatar.url(this.me.email)
+    }
+  },
+  methods: {
+    clickOnItem (itemName) {
+      switch (itemName) {
+        case 'log out':
+          this.logout()
+          break
+      }
+    },
+    logout () {
+      this.oauth.clearTokenData()
+      this.me = null
+      this.$router.replace({ name: 'main-page' })
     }
   },
   created () {
