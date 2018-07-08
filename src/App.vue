@@ -36,7 +36,7 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
     <v-content>
-      <main-page />
+      <router-view />
     </v-content>
     <v-footer fixed app>
       <v-flex
@@ -53,13 +53,8 @@
 </template>
 
 <script>
-import MainPage from './components/MainPage'
-
 export default {
   name: 'App',
-  components: {
-    MainPage
-  },
   data () {
     return {
       drawer: true,
