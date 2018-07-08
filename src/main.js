@@ -2,6 +2,7 @@ import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
 import './plugins/oauth'
+import './plugins/ghshop'
 import App from './App.vue'
 import router from './router'
 

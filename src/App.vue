@@ -6,9 +6,19 @@
       fixed
       app
       v-model="drawer"
-      v-if="loggedIn"
+      v-if="me"
     >
       <v-list>
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <img :src="avatarUrl" >
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title v-text="me.name"></v-list-tile-title>
+            <v-list-tile-sub-title v-text="me.email"></v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider />
         <v-list-tile
           value="true"
           v-for="(item, i) in items"
@@ -31,7 +41,7 @@
     >
       <v-toolbar-side-icon
         @click.stop="drawer = !drawer"
-        v-if="loggedIn"
+        v-if="me"
       ></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
@@ -53,6 +63,8 @@
 </template>
 
 <script>
+import gravatar from 'gravatar'
+
 export default {
   name: 'App',
   data () {
@@ -63,8 +75,22 @@ export default {
         title: 'Inspire'
       }],
       title: 'GHShop',
-      loggedIn: false
+      me: null
     }
+  },
+  computed: {
+    avatarUrl () {
+      if (this.me)
+        return gravatar.url(this.me.email)
+    }
+  },
+  created () {
+    var tokenData = this.oauth.getTokenData()
+    if (tokenData) {
+      this.ghshop.setToken(tokenData.accessToken)
+      this.ghshop.getMyself().then(me => { this.me = me })
+    } else
+      this.$router.replace({ name: 'main-page' })
   }
 }
 </script>

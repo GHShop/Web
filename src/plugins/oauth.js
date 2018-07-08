@@ -17,9 +17,10 @@ const OAuth = {
               typeof tokenData.accessToken === 'undefined' ||
               typeof tokenData.expiredAt === 'undefined' ||
               typeof tokenData.scope === 'undefined' ||
-              new Date().getTime() / 1000 > tokenData.expiredAt - 300)
+              new Date().getTime() / 1000 > tokenData.expiredAt - 300) {
+            this.clearTokenData()
             return null
-          else
+          } else
             return tokenData
         } else {
           tokenData = {
