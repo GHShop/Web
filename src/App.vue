@@ -46,6 +46,14 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
     <v-content>
+      <v-snackbar
+        v-model="snackbar.show"
+        :color="snackbar.color"
+        :timeout="snackbar.timeout"
+        right
+      >
+        {{snackbar.message}}
+      </v-snackbar>
       <router-view />
     </v-content>
     <v-footer fixed app>
@@ -118,6 +126,9 @@ export default {
       switch (itemName) {
         case 'log out':
           this.logout()
+          break
+        case 'users':
+          this.$router.replace({ name: 'user-list' })
           break
       }
     },

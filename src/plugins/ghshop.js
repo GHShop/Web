@@ -22,6 +22,19 @@ const GHShop = {
         var me = response.data
         me.levelNumber = toLevelNumber(me.level)
         return me
+      },
+      async getUsers () {
+        const response = await this.client.get('/users')
+        var users = response.data
+        for (var user of users)
+          assignLevelNumber(user)
+        return users
+      },
+      async putUser (user) {
+        const response = await this.client.put(`/users/${user.id}`, {
+          level: user.level
+        })
+        return assignLevelNumber(response.data)
       }
     }
   }
