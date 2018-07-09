@@ -19,7 +19,9 @@ const GHShop = {
       },
       async getMyself () {
         const response = await this.client.get('/myself')
-        return response.data
+        var me = response.data
+        me.levelNumber = toLevelNumber(me.level)
+        return me
       }
     }
   }

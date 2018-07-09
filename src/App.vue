@@ -20,7 +20,6 @@
         </v-list-tile>
         <v-divider />
         <v-list-tile
-          value="true"
           v-for="(item, i) in items"
           :key="i"
           @click="clickOnItem(item.name)"
@@ -71,16 +70,44 @@ export default {
   data () {
     return {
       drawer: true,
-      items: [{
-        name: 'log out',
-        icon: 'exit_to_app',
-        title: 'Log out'
-      }],
       title: 'GHShop',
       me: null
     }
   },
   computed: {
+    items () {
+      if (this.me) {
+        var items = []
+        if (this.me.levelNumber >= 3)
+          items.push({
+            name: 'users',
+            icon: 'people',
+            title: 'Users'
+          })
+        if (this.me.levelNumber >= 2)
+          items.push({
+            name: 'artists',
+            icon: 'photo',
+            title: 'Artists'
+          }, {
+            name: 'sales histroy',
+            icon: 'history',
+            title: 'Sales Histroy'
+          })
+        if (this.me.levelNumber >= 1)
+          items.push({
+            name: 'selling',
+            icon: 'shopping_cart',
+            title: 'Selling'
+          })
+        items.push({
+          name: 'log out',
+          icon: 'exit_to_app',
+          title: 'Log out'
+        })
+        return items
+      }
+    },
     avatarUrl () {
       if (this.me)
         return gravatar.url(this.me.email)
