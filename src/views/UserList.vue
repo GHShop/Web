@@ -63,6 +63,7 @@ export default {
     changeLevel (user, level) {
       var nUser = Object.assign({}, user)
       nUser.level = level
+      this.toast.dismiss()
       this.ghshop.putUser(nUser).then(nUser => {
         Object.assign(user, nUser)
         this.toast.success('Updated')

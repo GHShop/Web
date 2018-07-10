@@ -17,6 +17,9 @@ const Toast = {
       }
     })
     Vue.prototype.toast = {
+      dismiss () {
+        snackbar.show = false
+      },
       success (message) {
         Object.assign(snackbar, {
           show: true,
