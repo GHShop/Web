@@ -14,8 +14,9 @@
       </v-list-tile-content>
       <v-list-tile-action>
         <v-menu offset-y>
-          <v-btn slot="activator" icon>
+          <v-btn slot="activator" flat>
             <v-icon v-text="icons[user.levelNumber]"></v-icon>
+            <v-icon>arrow_drop_down</v-icon>
           </v-btn>
           <v-list>
             <v-list-tile
