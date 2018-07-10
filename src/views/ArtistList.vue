@@ -19,7 +19,8 @@
     <v-scale-transition origin="center center 0">
       <v-container fluid grid-list-lg v-if="card">
         <v-layout row wrap>
-          <v-flex xs12
+          <v-flex
+            xs12 sm6 md4 lg3
             v-for="artist in artists"
             :key="artist.id"
           >
