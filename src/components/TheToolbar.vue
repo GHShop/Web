@@ -11,10 +11,12 @@
       ></v-toolbar-side-icon>
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer />
-    <v-scale-transition origin="center center 0">
+    <v-scale-transition
+      v-for="action in appBar.actions"
+      :key="action.name"
+      origin="center center 0"
+    >
       <v-btn
-        v-for="action in appBar.actions"
-        :key="action.name"
         @click="onClickToolbarAction(action)"
         icon
       >

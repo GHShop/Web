@@ -43,10 +43,13 @@
         </v-layout>
       </v-container>
     </v-scale-transition>
+    <new-artist />
   </div>
 </template>
 
 <script>
+import NewArtist from '@/components/artists/NewArtist'
+
 const icons = {
   list: 'view_list',
   card: 'view_module'
@@ -58,16 +61,35 @@ function delay (ms) {
 
 export default {
   name: 'artist-list',
+  components: {
+    NewArtist
+  },
   data () {
     return {
       artists: [],
       card: false,
-      list: true,
+      list: true
+    }
+  },
+  methods: {
+    refresh () {
+      this.ghshop.getArtists().then(artists => {
+        this.artists = artists
+      })
+    }
+  },
+  provide () {
+    return {
+      refreshArtists: this.refresh
     }
   },
   created () {
-    this.ghshop.getArtists().then(artists => {
-      this.artists = artists
+    this.refresh()
+    this.toolbar.addAction({
+      name: 'refresh-artists',
+      icon: 'refresh'
+    }, () => {
+      this.refresh()
     })
     this.toolbar.addAction({
       name: 'switch-card',
@@ -88,6 +110,7 @@ export default {
     })
   },
   beforeDestroy () {
+    this.toolbar.removeAction({ name: 'refresh-artists' })
     this.toolbar.removeAction({ name: 'switch-card' })
   }
 }
