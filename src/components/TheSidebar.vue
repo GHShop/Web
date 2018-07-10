@@ -21,7 +21,8 @@
       <v-list-tile
         v-for="(item, i) in items"
         :key="i"
-        @click="onClickSidebarItem(item.name)"
+        @click="onClickSidebarItem(item)"
+        :class="{'primary--text': $route.name === item.to}"
       >
         <v-list-tile-action>
           <v-icon v-html="item.icon"></v-icon>
@@ -47,28 +48,33 @@ export default {
           items.push({
             name: 'users',
             icon: 'people',
-            title: 'Users'
+            title: 'Users',
+            to: 'user-list'
           })
         if (this.me.can.manage)
           items.push({
             name: 'artists',
             icon: 'photo',
-            title: 'Artists'
+            title: 'Artists',
+            to: 'artist-list'
           }, {
             name: 'sales histroy',
             icon: 'history',
-            title: 'Sales Histroy'
+            title: 'Sales Histroy',
+            to: 'sales-histroy'
           })
         if (this.me.can.sell)
           items.push({
             name: 'selling',
             icon: 'shopping_cart',
-            title: 'Selling'
+            title: 'Selling',
+            to: 'selling-list'
           })
         items.push({
           name: 'log out',
           icon: 'exit_to_app',
-          title: 'Log out'
+          title: 'Log out',
+          to: 'log-out'
         })
         return items
       }
@@ -79,18 +85,11 @@ export default {
     }
   },
   methods: {
-    onClickSidebarItem (name) {
-      switch (name) {
-        case 'log out':
-          this.logout()
-          break
-        case 'users':
-          this.$router.replace({ name: 'user-list' })
-          break
-        case 'artists':
-          this.$router.replace({ name: 'artist-list' })
-          break
-      }
+    onClickSidebarItem (item) {
+      if (item.name === 'log out')
+        this.logout()
+      else
+        this.$router.replace({ name: item.to })
     }
   }
 }
