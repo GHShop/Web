@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-scale-transition origin="center center 0">
-      <div v-if="list">
+      <div v-if="artists && mode === 'list'">
         <v-list>
           <v-list-tile
             v-for="artist in artists"
@@ -21,7 +21,11 @@
       </div>
     </v-scale-transition>
     <v-scale-transition origin="center center 0">
-      <v-container fluid grid-list-lg v-if="card">
+      <v-container
+        v-if="artists && mode === 'card'"
+        fluid
+        grid-list-lg
+      >
         <v-layout row wrap>
           <v-flex
             xs12 sm6 md4 lg3
@@ -67,12 +71,12 @@ export default {
   data () {
     return {
       artists: [],
-      card: false,
-      list: true
+      mode: 'list'
     }
   },
   methods: {
     refresh () {
+      this.artists = null
       this.ghshop.getArtists().then(artists => {
         this.artists = artists
       })
@@ -95,15 +99,15 @@ export default {
       name: 'switch-card',
       icon: icons.card
     }, async action => {
-      if (this.list) {
-        this.list = false
+      if (this.mode === 'list') {
+        this.mode = ''
         await delay(250)
-        this.card = true
+        this.mode = 'card'
         action.icon = icons.list
       } else {
-        this.card = false
+        this.mode = ''
         await delay(250)
-        this.list = true
+        this.mode = 'list'
         action.icon = icons.card
       }
       this.toolbar.updateAction(action)
