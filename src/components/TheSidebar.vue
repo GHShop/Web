@@ -21,7 +21,7 @@
       <v-list-tile
         v-for="(item, i) in items"
         :key="i"
-        @click="click(item.name)"
+        @click="onClickSidebarItem(item.name)"
       >
         <v-list-tile-action>
           <v-icon v-html="item.icon"></v-icon>
@@ -79,13 +79,16 @@ export default {
     }
   },
   methods: {
-    click (name) {
+    onClickSidebarItem (name) {
       switch (name) {
         case 'log out':
           this.logout()
           break
         case 'users':
           this.$router.replace({ name: 'user-list' })
+          break
+        case 'artists':
+          this.$router.replace({ name: 'artist-list' })
           break
       }
     }

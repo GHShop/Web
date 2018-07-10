@@ -51,6 +51,10 @@ const GHShop = {
         })
         return assignLevelNumber(user)
       },
+      async getArtists () {
+        const artists = await this.get('/artists')
+        return artists
+      },
       async get (url) {
         return await this.request('GET', url)
       },

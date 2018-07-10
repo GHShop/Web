@@ -10,6 +10,17 @@
       v-if="me.show"
       ></v-toolbar-side-icon>
     <v-toolbar-title v-text="title"></v-toolbar-title>
+    <v-spacer />
+    <v-scale-transition origin="center center 0">
+      <v-btn
+        v-for="action in appBar.actions"
+        :key="action.name"
+        @click="onClickToolbarAction(action)"
+        icon
+      >
+        <v-icon v-text="action.icon"></v-icon>
+      </v-btn>
+    </v-scale-transition>
   </v-toolbar>
 </template>
 
