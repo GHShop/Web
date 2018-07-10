@@ -24,11 +24,24 @@ export default {
     TheFooter,
     TheToast
   },
+  methods: {
+    redirectToHome () {
+      if (this.me.can.own)
+        this.$router.replace({ name: 'user-list' })
+      else if (this.me.can.manage)
+        this.$router.replace({ name: 'artist-list' })
+      else
+        this.$router.replace({ name: 'main-page' })
+    }
+  },
   created () {
     var tokenData = this.oauth.getTokenData()
     if (tokenData) {
       this.ghshop.setTokenData(tokenData)
-      this.login()
+      this.login().then(() => {
+        if (tokenData.fromHash)
+          this.redirectToHome()
+      })
     }
     else
       this.$router.replace({ name: 'main-page' })

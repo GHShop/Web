@@ -13,11 +13,10 @@ const Me = {
         }
       },
       methods: {
-        login () {
-          this.ghshop.getMyself().then(me => {
-            Object.assign(this.me, me)
-            this.me.show= true
-          })
+        async login () {
+          var me = await this.ghshop.getMyself()
+          Object.assign(this.me, me)
+          this.me.show = true
         },
         logout () {
           this.oauth.clearTokenData()

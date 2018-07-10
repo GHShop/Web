@@ -29,6 +29,7 @@ const OAuth = {
             scopes: tokenData.scope.split(' ')
           }
           window.localStorage.setItem('tokenData', JSON.stringify(tokenData))
+          tokenData.fromHash = true
           return tokenData
         }
       }
