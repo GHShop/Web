@@ -43,13 +43,13 @@ export default {
     items () {
       if (this.me.show) {
         var items = []
-        if (this.me.levelNumber >= 3)
+        if (this.me.can.own)
           items.push({
             name: 'users',
             icon: 'people',
             title: 'Users'
           })
-        if (this.me.levelNumber >= 2)
+        if (this.me.can.manage)
           items.push({
             name: 'artists',
             icon: 'photo',
@@ -59,7 +59,7 @@ export default {
             icon: 'history',
             title: 'Sales Histroy'
           })
-        if (this.me.levelNumber >= 1)
+        if (this.me.can.sell)
           items.push({
             name: 'selling',
             icon: 'shopping_cart',

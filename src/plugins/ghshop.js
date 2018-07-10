@@ -22,6 +22,22 @@ function assignLevelNumber (user) {
   return user
 }
 
+function assignCan (user, scopes) {
+  var can = {
+    own: false,
+    manage: false,
+    sell: false
+  }
+  if (user.levelNumber >= 3 && scopes.includes('ghshop.own'))
+    can.own = true
+  if (user.levelNumber >= 2 && scopes.includes('ghshop.manage'))
+    can.manage = true
+  if (user.levelNumber >= 1 && scopes.includes('ghshop.sell'))
+    can.sell = true
+  user.can = can
+  return user
+}
+
 const GHShop = {
   install (Vue) {
     Vue.prototype.ghshop = {
@@ -37,7 +53,7 @@ const GHShop = {
       },
       async getMyself () {
         const me = await this.get('/myself')
-        return assignLevelNumber(me)
+        return assignCan(assignLevelNumber(me), this.tokenData.scopes)
       },
       async getUsers () {
         const users = await this.get('/users')

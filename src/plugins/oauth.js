@@ -16,7 +16,7 @@ const OAuth = {
           if (tokenData === null ||
               typeof tokenData.accessToken === 'undefined' ||
               typeof tokenData.expiredAt === 'undefined' ||
-              typeof tokenData.scope === 'undefined' ||
+              typeof tokenData.scopes === 'undefined' ||
               new Date().getTime() / 1000 > tokenData.expiredAt - 300) {
             this.clearTokenData()
             return null
@@ -26,7 +26,7 @@ const OAuth = {
           tokenData = {
             accessToken: tokenData.access_token,
             expiredAt: parseFloat(tokenData.expires_in) + new Date().getTime() / 1000,
-            scope: tokenData.scope
+            scopes: tokenData.scope.split(' ')
           }
           window.localStorage.setItem('tokenData', JSON.stringify(tokenData))
           return tokenData

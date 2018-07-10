@@ -16,12 +16,12 @@
         <v-flex xs4 text-xs-center>
           <v-icon large>business</v-icon>
           <h3>For Manager</h3>
-          <v-btn color="info" href="https://pineauth-177914.appspot.com/oauth/authorize?response_type=token&scope=ghshop.manage&client_id=B7S9mUDYgtRTBYOzT82SXZVZE45VjRNOw2J8avEBh04&redirect_uri=http://192.168.0.2:8080/">Log in</v-btn>
+          <v-btn color="info" href="https://pineauth-177914.appspot.com/oauth/authorize?response_type=token&scope=ghshop.manage%20ghshop.sell&client_id=B7S9mUDYgtRTBYOzT82SXZVZE45VjRNOw2J8avEBh04&redirect_uri=http://192.168.0.2:8080/">Log in</v-btn>
         </v-flex>
         <v-flex xs4 text-xs-center>
           <v-icon large>settings</v-icon>
           <h3>For Owner</h3>
-          <v-btn color="info" href="https://pineauth-177914.appspot.com/oauth/authorize?response_type=token&scope=ghshop.own&client_id=B7S9mUDYgtRTBYOzT82SXZVZE45VjRNOw2J8avEBh04&redirect_uri=http://192.168.0.2:8080/">Log in</v-btn>
+          <v-btn color="info" href="https://pineauth-177914.appspot.com/oauth/authorize?response_type=token&scope=ghshop.own%20ghshop.manage%20ghshop.sell&client_id=B7S9mUDYgtRTBYOzT82SXZVZE45VjRNOw2J8avEBh04&redirect_uri=http://192.168.0.2:8080/">Log in</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
