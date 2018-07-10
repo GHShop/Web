@@ -1,21 +1,25 @@
 <template>
   <div>
-    <v-list class="artists" v-if="!card">
-      <v-list-tile
-        v-for="artist in artists"
-        :key="artist.id"
-      >
-        <v-list-tile-content>
-          <v-list-tile-title v-text="artist.name"></v-list-tile-title>
-          <v-list-tile-sub-title v-text="artist.introduction"></v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action>
-          <v-btn icon>
-            <v-icon>edit</v-icon>
-          </v-btn>
-        </v-list-tile-action>
-      </v-list-tile>
-    </v-list>
+    <v-scale-transition origin="center center 0">
+      <div v-if="list">
+        <v-list>
+          <v-list-tile
+            v-for="artist in artists"
+            :key="artist.id"
+          >
+            <v-list-tile-content>
+              <v-list-tile-title v-text="artist.name"></v-list-tile-title>
+              <v-list-tile-sub-title v-text="artist.introduction"></v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn icon>
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </div>
+    </v-scale-transition>
     <v-scale-transition origin="center center 0">
       <v-container fluid grid-list-lg v-if="card">
         <v-layout row wrap>
@@ -43,14 +47,22 @@
 </template>
 
 <script>
-const icons = ['view_module', 'view_list']
+const icons = {
+  list: 'view_list',
+  card: 'view_module'
+}
+
+function delay (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export default {
   name: 'artist-list',
   data () {
     return {
       artists: [],
-      card: false
+      card: false,
+      list: true,
     }
   },
   created () {
@@ -59,10 +71,19 @@ export default {
     })
     this.toolbar.addAction({
       name: 'switch-card',
-      icon: icons[0]
-    }, action => {
-      this.card = !this.card
-      action.icon = icons[this.card + 0]
+      icon: icons.card
+    }, async action => {
+      if (this.list) {
+        this.list = false
+        await delay(250)
+        this.card = true
+        action.icon = icons.list
+      } else {
+        this.card = false
+        await delay(250)
+        this.list = true
+        action.icon = icons.card
+      }
       this.toolbar.updateAction(action)
     })
   },
@@ -73,7 +94,7 @@ export default {
 </script>
 
 <style scoped>
-.artists {
-  background: inherit
+.v-list {
+  background: inherit;
 }
 </style>
