@@ -27,11 +27,19 @@
 </template>
 
 <script>
+const titles = {
+  'user-list': 'Users',
+  'artist-list': 'Artists'
+}
+
 export default {
   name: 'the-toolbar',
-  data () {
-    return {
-      title: 'GHShop'
+  computed: {
+    title () {
+      var title = titles[this.$route.name]
+      if (title)
+        return title
+      return 'GHShop'
     }
   }
 }
