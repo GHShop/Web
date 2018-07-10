@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import axios from 'axios'
 
+const levelNumbers = {
+  Owner: 3,
+  Manager: 2,
+  Clerk: 1,
+  Guest: 0
+}
+
 function create_client (token = null) {
   return axios.create({
     baseURL: 'https://ghshop-175009.appspot.com',
@@ -10,31 +17,69 @@ function create_client (token = null) {
   })
 }
 
+function assignLevelNumber (user) {
+  user.levelNumber = levelNumbers[user.level]
+  return user
+}
+
 const GHShop = {
   install (Vue) {
     Vue.prototype.ghshop = {
       client: null,
-      setToken (token) {
-        this.client = create_client(token)
+      tokenData: null,
+      queue: [],
+      setTokenData (tokenData) {
+        this.tokenData = tokenData
+        this.client = create_client(tokenData.accessToken)
+        for (var request of this.queue)
+          this.request(request.method, request.url, request.data).then(request.resolve)
+        this.queue = []
       },
       async getMyself () {
-        const response = await this.client.get('/myself')
-        var me = response.data
-        me.levelNumber = toLevelNumber(me.level)
-        return me
+        const me = await this.get('/myself')
+        return assignLevelNumber(me)
       },
       async getUsers () {
-        const response = await this.client.get('/users')
-        var users = response.data
+        const users = await this.get('/users')
         for (var user of users)
           assignLevelNumber(user)
         return users
       },
       async putUser (user) {
-        const response = await this.client.put(`/users/${user.id}`, {
+        user = await this.put(`/users/${user.id}`, {
           level: user.level
         })
-        return assignLevelNumber(response.data)
+        return assignLevelNumber(user)
+      },
+      async get (url) {
+        return await this.request('GET', url)
+      },
+      async post (url, data) {
+        return await this.request('POST', url, data)
+      },
+      async put (url, data) {
+        return await this.request('PUT', url, data)
+      },
+      async delete (url) {
+        return await this.request('DELETE', url)
+      },
+      request (method, url, data = null) {
+        return new Promise(async (resolve) => {
+          if (this.client) {
+            const response = await this.client.request({
+              method,
+              url,
+              data
+            })
+            resolve(response.data)
+          } else
+            this.queue.push({
+              method,
+              url,
+              data,
+              resolve
+            })
+        })
       }
     }
   }

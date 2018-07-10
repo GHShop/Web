@@ -12,7 +12,7 @@ const Toast = {
     Vue.mixin({
       data () {
         return {
-          snackbar: snackbar
+          snackbar
         }
       }
     })
