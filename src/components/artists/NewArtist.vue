@@ -44,7 +44,7 @@
           New Artist
         </v-card-title>
         <v-card-text>
-          <v-form v-model="valid">
+          <v-form ref="form" v-model="valid">
             <v-text-field
               v-model="artist.name"
               :rules="rules.name"
@@ -97,6 +97,7 @@ export default {
       if (this.valid) {
         this.dialog = false
         this.ghshop.postArtist(artist).then(() => {
+          this.$refs.form.reset()
           this.refreshArtists()
         })
       }
