@@ -7,6 +7,26 @@ const snackbar = {
   timeout: 3000
 }
 
+const toaster = {
+  dismiss () {
+    snackbar.show = false
+  },
+  success (message) {
+    Object.assign(snackbar, {
+      show: true,
+      color: 'success',
+      message
+    })
+  },
+  error (message) {
+    Object.assign(snackbar, {
+      show: true,
+      color: 'error',
+      message
+    })
+  }
+}
+
 const Toast = {
   install (Vue) {
     Vue.mixin({
@@ -16,19 +36,10 @@ const Toast = {
         }
       }
     })
-    Vue.prototype.toast = {
-      dismiss () {
-        snackbar.show = false
-      },
-      success (message) {
-        Object.assign(snackbar, {
-          show: true,
-          color: 'success',
-          message: message
-        })
-      }
-    }
+    Vue.prototype.toast = toaster
   }
 }
 
 Vue.use(Toast)
+
+export default toaster

@@ -1,11 +1,18 @@
 import Vue from 'vue'
 import axios from 'axios'
+import toast from './toast'
 
 const levelNumbers = {
   Owner: 3,
   Manager: 2,
   Clerk: 1,
   Guest: 0
+}
+
+const toastMessages = {
+  POST: 'Created',
+  PUT: 'Updated',
+  DELETE: 'Deleted'
 }
 
 function create_client (token = null) {
@@ -86,12 +93,22 @@ const GHShop = {
       request (method, url, data = null) {
         return new Promise(async (resolve) => {
           if (this.client) {
-            const response = await this.client.request({
-              method,
-              url,
-              data
-            })
-            resolve(response.data)
+            toast.dismiss()
+            try {
+              const response = await this.client.request({
+                method,
+                url,
+                data
+              })
+              if (toastMessages[method])
+                toast.success(toastMessages[method])
+              resolve(response.data)
+            } catch (error) {
+              if (error.response && error.response.data.error_description)
+                toast.error(error.response.data.error_description)
+              else
+                toast.error('Something went wrong.')
+            }
           } else
             this.queue.push({
               method,
