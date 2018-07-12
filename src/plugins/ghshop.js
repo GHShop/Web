@@ -80,6 +80,9 @@ const GHShop = {
       async postArtist (artist) {
         return await this.post('/artists', artist)
       },
+      async putArtist (artist) {
+        return await this.put(`/artists/${artist.id}`, artist)
+      },
       async get (url) {
         return await this.request('GET', url)
       },

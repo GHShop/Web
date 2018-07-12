@@ -12,7 +12,7 @@
               <v-list-tile-sub-title v-text="artist.introduction"></v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-btn icon>
+              <v-btn icon @click="edit(artist)">
                 <v-icon>edit</v-icon>
               </v-btn>
             </v-list-tile-action>
@@ -36,11 +36,16 @@
               <v-card-title>
                 <div class="headline" v-text="artist.name"></div>
               </v-card-title>
-              <v-card-text v-text="artist.introduction">
+              <v-card-text>
+                <pre v-text="artist.introduction"></pre>
               </v-card-text>
               <v-divider />
               <v-card-actions>
-                <v-btn flat color="primary">edit</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="edit(artist)"
+                >edit</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -48,11 +53,13 @@
       </v-container>
     </v-scale-transition>
     <new-artist />
+    <edit-artist :artist="editedArtist" />
   </div>
 </template>
 
 <script>
 import NewArtist from '@/components/artists/NewArtist'
+import EditArtist from '@/components/artists/EditArtist'
 
 const icons = {
   list: 'view_list',
@@ -66,12 +73,14 @@ function delay (ms) {
 export default {
   name: 'artist-list',
   components: {
-    NewArtist
+    NewArtist,
+    EditArtist
   },
   data () {
     return {
       artists: [],
-      mode: 'list'
+      mode: 'list',
+      editedArtist: null
     }
   },
   methods: {
@@ -80,11 +89,18 @@ export default {
       this.ghshop.getArtists().then(artists => {
         this.artists = artists
       })
+    },
+    edit (artist) {
+      this.editedArtist = artist
+    },
+    updated () {
+      this.editedArtist = null
     }
   },
   provide () {
     return {
-      refreshArtists: this.refresh
+      refreshArtists: this.refresh,
+      onUpdateArtist: this.updated
     }
   },
   created () {
@@ -123,5 +139,8 @@ export default {
 <style scoped>
 .v-list {
   background: inherit;
+}
+pre {
+  white-space: pre-wrap;
 }
 </style>
