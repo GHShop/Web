@@ -2,7 +2,7 @@
   <div>
     <v-scale-transition origin="center center 0">
       <div v-if="artists && mode === 'list'">
-        <v-list>
+        <v-list two-line>
           <v-list-tile
             v-for="artist in artists"
             :key="artist.id"
@@ -91,7 +91,7 @@ export default {
       })
     },
     edit (artist) {
-      this.editedArtist = artist
+      this.editedArtist = Object.assign({}, artist)
     },
     updated () {
       this.editedArtist = null

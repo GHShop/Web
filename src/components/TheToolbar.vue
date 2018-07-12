@@ -4,7 +4,7 @@
     dark
     clipped-left
     app
-    >
+  >
     <v-toolbar-side-icon
       @click.stop="sidebar.show = !sidebar.show"
       v-if="me.show"

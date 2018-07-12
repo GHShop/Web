@@ -98,7 +98,8 @@ const GHShop = {
       request (method, url, data = null) {
         return new Promise(async (resolve) => {
           if (this.client) {
-            toast.dismiss()
+            if (toastMessages[method])
+              toast.dismiss()
             try {
               const response = await this.client.request({
                 method,
