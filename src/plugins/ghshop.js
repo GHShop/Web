@@ -83,6 +83,9 @@ const GHShop = {
       async putArtist (artist) {
         return await this.put(`/artists/${artist.id}`, artist)
       },
+      async deleteArtist (artist) {
+        return await this.delete(`/artists/${artist.id}`)
+      },
       async get (url) {
         return await this.request('GET', url)
       },

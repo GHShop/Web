@@ -17,6 +17,7 @@
       origin="center center 0"
     >
       <v-btn
+        v-if="!action.hide"
         @click="onClickToolbarAction(action)"
         icon
       >

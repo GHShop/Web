@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-scale-transition origin="center center 0">
-      <div v-if="artists && mode === 'list'">
+      <div v-if="artists && view === 'list'">
         <v-list two-line>
           <v-list-tile
             v-for="artist in artists"
@@ -12,8 +12,8 @@
               <v-list-tile-sub-title v-text="artist.introduction"></v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-btn icon @click="edit(artist)">
-                <v-icon>edit</v-icon>
+              <v-btn icon @click="mode == 'edit' ? edit(artist) : confirmDelete(artist)">
+                <v-icon :color="mode == 'delete' ? 'error' : undefined" v-text="mode"></v-icon>
               </v-btn>
             </v-list-tile-action>
           </v-list-tile>
@@ -22,7 +22,7 @@
     </v-scale-transition>
     <v-scale-transition origin="center center 0">
       <v-container
-        v-if="artists && mode === 'card'"
+        v-if="artists && view === 'card'"
         fluid
         grid-list-lg
       >
@@ -46,6 +46,11 @@
                   color="primary"
                   @click="edit(artist)"
                 >edit</v-btn>
+                <v-btn
+                  flat
+                  color="error"
+                  @click="confirmDelete(artist)"
+                >delete</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -53,17 +58,21 @@
       </v-container>
     </v-scale-transition>
     <new-artist />
-    <edit-artist :artist="editedArtist" />
+    <edit-artist :artist="artistToEdit" />
+    <delete-artist :artist="artistToDelete" />
   </div>
 </template>
 
 <script>
 import NewArtist from '@/components/artists/NewArtist'
 import EditArtist from '@/components/artists/EditArtist'
+import DeleteArtist from '@/components/artists/DeleteArtist'
 
 const icons = {
   list: 'view_list',
-  card: 'view_module'
+  card: 'view_module',
+  edit: 'edit',
+  delete: 'delete'
 }
 
 function delay (ms) {
@@ -74,13 +83,16 @@ export default {
   name: 'artist-list',
   components: {
     NewArtist,
-    EditArtist
+    EditArtist,
+    DeleteArtist
   },
   data () {
     return {
       artists: [],
-      mode: 'list',
-      editedArtist: null
+      view: 'list',
+      mode: 'edit',
+      artistToEdit: null,
+      artistToDelete: null
     }
   },
   methods: {
@@ -91,16 +103,23 @@ export default {
       })
     },
     edit (artist) {
-      this.editedArtist = Object.assign({}, artist)
+      this.artistToEdit = Object.assign({}, artist)
     },
     updated () {
-      this.editedArtist = null
+      this.artistToEdit = null
+    },
+    confirmDelete (artist) {
+      this.artistToDelete = artist
+    },
+    deleted () {
+      this.artistToDelete = null
     }
   },
   provide () {
     return {
       refreshArtists: this.refresh,
-      onUpdateArtist: this.updated
+      onUpdateArtist: this.updated,
+      onDeleteArtist: this.deleted
     }
   },
   created () {
@@ -111,27 +130,47 @@ export default {
     }, () => {
       this.refresh()
     })
-    this.toolbar.addAction({
-      name: 'switch-card',
-      icon: icons.card
-    }, async action => {
-      if (this.mode === 'list') {
-        this.mode = ''
-        await delay(250)
-        this.mode = 'card'
-        action.icon = icons.list
-      } else {
-        this.mode = ''
-        await delay(250)
-        this.mode = 'list'
-        action.icon = icons.card
+    var modeAction = {
+      name: 'switch-mode',
+      icon: icons.delete,
+      hide: false
+    }
+    this.toolbar.addAction(modeAction, action => {
+      if (this.mode === 'edit') {
+        this.mode = 'delete'
+        action.icon = icons.edit
+      }
+      else {
+        this.mode = 'edit'
+        action.icon = icons.delete
       }
       this.toolbar.updateAction(action)
+    })
+    this.toolbar.addAction({
+      name: 'switch-view',
+      icon: icons.card
+    }, async action => {
+      if (this.view === 'list') {
+        this.view = ''
+        await delay(250)
+        this.view = 'card'
+        action.icon = icons.list
+        modeAction.hide = true
+      } else {
+        this.view = ''
+        await delay(250)
+        this.view = 'list'
+        action.icon = icons.card
+        modeAction.hide = false
+      }
+      this.toolbar.updateAction(action)
+      this.toolbar.updateAction(modeAction)
     })
   },
   beforeDestroy () {
     this.toolbar.removeAction({ name: 'refresh-artists' })
-    this.toolbar.removeAction({ name: 'switch-card' })
+    this.toolbar.removeAction({ name: 'switch-mode' })
+    this.toolbar.removeAction({ name: 'switch-view' })
   }
 }
 </script>
