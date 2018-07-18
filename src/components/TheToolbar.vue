@@ -6,9 +6,11 @@
     app
   >
     <v-toolbar-side-icon
-      @click.stop="sidebar.show = !sidebar.show"
+      @click.stop="navigation.back ? navigateBack() : (sidebar.show = !sidebar.show)"
       v-if="me.show"
-      ></v-toolbar-side-icon>
+    >
+      <v-icon v-if="navigation.back">arrow_back</v-icon>
+    </v-toolbar-side-icon>
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer />
     <v-scale-transition
@@ -30,7 +32,8 @@
 <script>
 const titles = {
   'user-list': 'Users',
-  'artist-list': 'Artists'
+  'artist-list': 'Artists',
+  'artist-page': 'Artist'
 }
 
 export default {

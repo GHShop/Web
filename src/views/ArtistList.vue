@@ -6,13 +6,14 @@
           <v-list-tile
             v-for="artist in artists"
             :key="artist.id"
+            :to="{ name: 'artist-page', params: { id: artist.id } }"
           >
             <v-list-tile-content>
               <v-list-tile-title v-text="artist.name"></v-list-tile-title>
               <v-list-tile-sub-title v-text="artist.introduction"></v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-btn icon @click="mode == 'edit' ? edit(artist) : confirmDelete(artist)">
+              <v-btn icon @click.prevent="mode == 'edit' ? edit(artist) : confirmDelete(artist)">
                 <v-icon :color="mode == 'delete' ? 'error' : undefined" v-text="mode"></v-icon>
               </v-btn>
             </v-list-tile-action>
@@ -28,7 +29,7 @@
       >
         <v-layout row wrap>
           <v-flex
-            xs12 sm6 md4 lg3
+            xs12 sm6 md4 lg4 xl3
             v-for="artist in artists"
             :key="artist.id"
           >
@@ -41,6 +42,11 @@
               </v-card-text>
               <v-divider />
               <v-card-actions>
+                <v-btn
+                  flat
+                  color="primary"
+                  :to="{ name: 'artist-page', params: { id: artist.id } }"
+                >show</v-btn>
                 <v-btn
                   flat
                   color="primary"

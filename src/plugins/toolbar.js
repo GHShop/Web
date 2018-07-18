@@ -4,17 +4,26 @@ const appBar = {
   actions: {}
 }
 
+const navigation = {
+  back: 0,
+}
+
 const Toolbar = {
   install (Vue) {
     Vue.mixin({
       data () {
         return {
-          appBar
+          appBar,
+          navigation
         }
       },
       methods: {
         onClickToolbarAction (action) {
           this.toolbar.callbacks[action.name](action)
+        },
+        navigateBack () {
+          this.navigation.back--
+          this.$router.back()
         }
       }
     })
@@ -38,6 +47,9 @@ const Toolbar = {
         delete appBar.actions[action.name]
         appBar.actions = Object.assign({}, appBar.actions)
         delete this.callbacks[action.name]
+      },
+      pushNavigation () {
+        navigation.back++
       }
     }
   }
