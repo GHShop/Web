@@ -137,7 +137,7 @@ export default {
       this.refresh()
     })
     var modeAction = {
-      name: 'switch-mode',
+      name: 'switch-artists-mode',
       icon: icons.delete,
       hide: false
     }
@@ -175,7 +175,7 @@ export default {
   },
   beforeDestroy () {
     this.toolbar.removeAction({ name: 'refresh-artists' })
-    this.toolbar.removeAction({ name: 'switch-mode' })
+    this.toolbar.removeAction({ name: 'switch-artists-mode' })
     this.toolbar.removeAction({ name: 'switch-view' })
   }
 }
